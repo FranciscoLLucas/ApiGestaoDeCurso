@@ -1,0 +1,85 @@
+/* src/App.css */
+
+/* Container principal flexível */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: system-ui, sans-serif;
+}
+
+/* O Cabeçalho */
+.cabecalho {
+  display: flex;
+  flex-direction: column; /* Mantém um embaixo do outro */
+  align-items: center;    /* Centraliza tudo no meio da tela */
+  margin-bottom: 30px;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 15px;
+  gap: 15px;
+}
+
+.navegacao {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center; /* Centraliza os botões */
+}
+
+/* A Grade de Cursos */
+.grid-cursos {
+  display: grid;
+  gap: 15px;
+  /* auto-fit faz com que os cards se ajustem e preencham o espaço vazio, minmax garante que nunca fiquem menores que 280px */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+}
+
+/* Regras para Celulares (telas menores que 600px) */
+@media (max-width: 600px) {
+  .cabecalho {
+    flex-direction: column; /* Coloca o título em cima e o menu embaixo */
+    text-align: center;
+  }
+  
+  .navegacao {
+    justify-content: center;
+    width: 100%;
+  }
+}
+/* Estilo individual de cada Card de Curso */
+.card-curso {
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Garante que todos os cards da linha tenham a mesma altura */
+  box-sizing: border-box;
+}
+
+/* Agrupa os textos para que eles empurrem o botão para o fundo */
+.card-conteudo {
+  flex-grow: 1; 
+}
+
+/* Garante que o link/botão vá sempre para o final do espaço disponível */
+.card-acao {
+  margin-top: auto; 
+  display: flex;
+  justify-content: center; /* Centraliza o botão dentro do card */
+  padding-top: 15px;
+}
+
+.botao-detalhes {
+  padding: 8px 12px;
+  cursor: pointer;
+  background-color: #6c757d; /* Cor cinza que aparece na sua imagem */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.botao-detalhes:hover {
+  background-color: #5a6268;
+}
