@@ -7,8 +7,11 @@ export default function DetalhesCurso() {
   const navigate = useNavigate();
   const [curso, setCurso] = useState(null);
   const [loading, setLoading] = useState(true);
+  
+  // 1. Novos estados para buscar os alunos disponíveis e guardar qual foi selecionado
+  const [todosAlunos, setTodosAlunos] = useState([]);
+  const [alunoSelecionado, setAlunoSelecionado] = useState('');
 
-  // Criamos uma função separada para carregar os dados, assim podemos chamá-la de novo ao desvincular um aluno
   const carregarCurso = () => {
     api.get(`/cursos/${id}`)
       .then(response => {
@@ -21,17 +24,43 @@ export default function DetalhesCurso() {
       });
   };
 
+  // 2. Novo método para carregar a lista de todos os alunos do banco
+  const carregarTodosAlunos = () => {
+    api.get('/alunos')
+      .then(response => setTodosAlunos(response.data))
+      .catch(error => console.error("Erro ao buscar alunos:", error));
+  };
+
   useEffect(() => {
     carregarCurso();
+    carregarTodosAlunos(); // Chama a busca de alunos ao abrir a tela
   }, [id]);
 
-  // Função para excluir o curso
+  // 3. Nova função para matricular o aluno a partir do dropdown
+  const handleMatricularAlunoExistente = () => {
+    if (!alunoSelecionado) {
+      alert("Por favor, selecione um aluno na lista.");
+      return;
+    }
+
+    api.put(`/alunos/${alunoSelecionado}/matricular/${id}`)
+      .then(() => {
+        alert("Aluno adicionado ao curso com sucesso!");
+        setAlunoSelecionado(''); // Limpa a caixa de seleção
+        carregarCurso(); // Atualiza a tabela imediatamente
+      })
+      .catch(error => {
+        console.error("Erro ao matricular:", error);
+        alert("Erro ao matricular. O aluno já pode estar vinculado a outro curso!");
+      });
+  };
+
   const handleDeleteCurso = () => {
     if (window.confirm("Tem certeza que deseja excluir este curso?")) {
       api.delete(`/cursos/${id}`)
         .then(() => {
           alert("Curso excluído com sucesso!");
-          navigate('/'); // Volta para a tela inicial
+          navigate('/');
         })
         .catch(error => {
           console.error("Erro ao excluir curso:", error);
@@ -40,13 +69,12 @@ export default function DetalhesCurso() {
     }
   };
 
-  // Função para desvincular aluno
   const handleDesvincular = (matricula) => {
     if (window.confirm("Remover este aluno do curso?")) {
       api.put(`/alunos/${matricula}/desvincular`)
         .then(() => {
           alert("Aluno removido do curso!");
-          carregarCurso(); // Recarrega a lista de alunos na tela automaticamente
+          carregarCurso();
         })
         .catch(error => {
           console.error("Erro ao desvincular:", error);
@@ -66,7 +94,6 @@ export default function DetalhesCurso() {
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px', borderBottom: '2px solid #eee', paddingBottom: '10px' }}>
         <h2 style={{ margin: 0 }}>{curso.nome}</h2>
-        {/* Botão de Excluir Curso */}
         <button onClick={handleDeleteCurso} style={{ background: '#dc3545', color: '#fff', border: 'none', padding: '8px 12px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>
           Excluir Curso
         </button>
@@ -76,6 +103,31 @@ export default function DetalhesCurso() {
         <p><strong>Professor:</strong> {curso.professor}</p>
         <p><strong>Local:</strong> {curso.local}</p>
         <p><strong>Carga Horária:</strong> {curso.horas}h</p>
+      </div>
+
+      {/* 4. Novo bloco de UI para adicionar o aluno ao curso */}
+      <div style={{ background: '#e9ecef', padding: '15px', borderRadius: '8px', marginBottom: '20px', color: '#000' }}>
+        <h4 style={{ margin: '0 0 10px 0' }}>Adicionar Aluno ao Curso</h4>
+        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+          <select 
+                value={alunoSelecionado} 
+                onChange={e => setAlunoSelecionado(e.target.value)}
+                style={{ flex: 1, minWidth: '200px', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', color: '#000', backgroundColor: '#ffffff' }}
+              >
+              <option value="">-- Selecione um aluno já cadastrado --</option>
+            {todosAlunos.map(aluno => (
+              <option key={aluno.matricula} value={aluno.matricula}>
+                {aluno.nome} ({aluno.email})
+              </option>
+            ))}
+          </select>
+          <button 
+            onClick={handleMatricularAlunoExistente}
+            style={{ background: '#28a745', color: '#fff', border: 'none', padding: '10px 20px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
+          >
+            Matricular
+          </button>
+        </div>
       </div>
 
       <h3>Alunos Matriculados ({curso.alunos.length})</h3>
@@ -99,7 +151,6 @@ export default function DetalhesCurso() {
                 <td style={{ padding: '12px' }}>{aluno.nome}</td>
                 <td style={{ padding: '12px' }}>{aluno.email}</td>
                 <td style={{ padding: '12px', textAlign: 'center' }}>
-                  {/* Botão de Desvincular Aluno */}
                   <button 
                     onClick={() => handleDesvincular(aluno.matricula)} 
                     style={{ background: '#ffc107', color: '#000', border: 'none', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>

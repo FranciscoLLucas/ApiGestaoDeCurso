@@ -41,7 +41,7 @@ export default function CadastrarCurso() {
     api.post(`/cursos/gestor/${gestorId}`, novoCurso)
       .then(() => {
         alert("Curso cadastrado com sucesso!");
-        navigate('/'); s
+        navigate('/');
       })
       .catch(error => {
         console.error("Erro ao cadastrar curso:", error);
