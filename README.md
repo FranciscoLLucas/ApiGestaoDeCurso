@@ -28,7 +28,7 @@ Projeto Full-Stack desenvolvido como trabalho acadêmico para o gerenciamento de
 
 ## 📊 Diagrama do Banco de Dados (DER)
 
-O diagrama abaixo representa o Modelo Entidade-Relacionamento Lógico do sistema utilizando a notação *Crow's Foot* (Pé de Galinha).
+O diagrama abaixo representa o Modelo Entidade-Relacionamento Lógico do sistema.
 
 ![Diagrama Entidade-Relacionamento do Sistema](img/DER.png)
 
