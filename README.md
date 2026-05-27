@@ -30,33 +30,7 @@ Projeto Full-Stack desenvolvido como trabalho acadêmico para o gerenciamento de
 
 O diagrama abaixo representa o Modelo Entidade-Relacionamento Lógico do sistema utilizando a notação *Crow's Foot* (Pé de Galinha).
 
-```mermaid
-erDiagram
-    GESTOR ||--o{ CURSO : "gerencia"
-    CURSO ||--o{ ALUNO : "possui"
-
-    GESTOR {
-        BIGINT id PK "Chave Primária"
-        VARCHAR nome "Não Nulo"
-        VARCHAR email "Não Nulo, Único"
-    }
-
-    CURSO {
-        BIGINT id PK "Chave Primária"
-        VARCHAR nome "Não Nulo"
-        VARCHAR local "Não Nulo"
-        INT horas "Não Nulo"
-        VARCHAR professor "Não Nulo"
-        BIGINT gestor_id FK "Chave Estrangeira"
-    }
-
-    ALUNO {
-        BIGINT matricula PK "Chave Primária"
-        VARCHAR nome "Não Nulo"
-        VARCHAR email "Não Nulo, Único"
-        BIGINT curso_id FK "Chave Estrangeira (Opcional)"
-    }
-```
+![Diagrama Entidade-Relacionamento do Sistema](img/der.png)
 
 ### Regras de Cardinalidade:
 * **Gestor ➡️ Curso (1:N):** Um gestor pode gerenciar múltiplos cursos, mas cada curso possui um único gestor responsável.
