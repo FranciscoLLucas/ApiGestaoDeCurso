@@ -30,7 +30,7 @@ Projeto Full-Stack desenvolvido como trabalho acadêmico para o gerenciamento de
 
 O diagrama abaixo representa o Modelo Entidade-Relacionamento Lógico do sistema.
 
-![Diagrama Entidade-Relacionamento do Sistema](img/der.png)
+![Diagrama Entidade-Relacionamento do Sistema](img/img_der.png)
 
 ### Regras de Cardinalidade:
 * **Gestor ➡️ Curso (1:N):** Um gestor pode gerenciar múltiplos cursos, mas cada curso possui um único gestor responsável.
